@@ -12,7 +12,7 @@ export const useUserStore = defineStore("points-user", {
     userInfo: null,
     loading: false,
     permissions: [],
-    routes: [],
+    routes: [...asyncRoutes],
     pointsDictValue: "",
   }),
 

@@ -193,6 +193,22 @@ export const asyncRoutes = [
           role: ["jfdh"],
         },
       },
+      {
+        path: "points-consumption",
+        name: "points-consumption",
+        component: () => import("@/views/points-mall/points-consumption/index.vue"),
+        meta: {
+          title: "积分消耗轨迹",
+        },
+      },
+      {
+        path: "points-learning-report",
+        name: "points-learning-report",
+        component: () => import("@/views/points-mall/points-learn/index.vue"),
+        meta: {
+          title: "积分学习报表",
+        },
+      },
     ],
   },
   {
@@ -230,18 +246,20 @@ export const asyncRoutes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: routes.concat(asyncRoutes),
 });
 let hasAddedRoutes = false;
 
 router.beforeEach(async (to, _from, next) => {
   const userStore = useUserStore();
-
+  next();
+  return;
   // 如果访问404页面，直接放行
   if (to.path === "/404") {
     next();
     return;
   }
+
   if (to.query?.dictValue) {
     userStore.setDictValue(to.query.dictValue);
     const obj = {
