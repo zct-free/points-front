@@ -1,10 +1,12 @@
 // 导入所有directive文件夹下的指令并导出
 
 import { vLoading } from "./loading/index.js";
+import { vPermission } from "./permission/index.js";
 
 // 所有指令的集合
 const directives = {
   loading: vLoading,
+  permission: vPermission,
 };
 
 // 批量注册指令的安装函数
