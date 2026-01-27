@@ -1,0 +1,38 @@
+{
+  "name": "vue3-admin",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode test",
+    "build": "vite build --mode production",
+    "build:stage": "vite build --mode production",
+    "build:test": "vite build --mode test",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "ant-design-vue": "^3.2.20",
+    "axios": "^1.9.0",
+    "dayjs": "^1.11.13",
+    "js-cookie": "^3.0.5",
+    "lodash-es": "^4.17.21",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/eslint-config-prettier": "^10.1.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "eslint-plugin-vue": "^9.30.0",
+    "globals": "^15.12.0",
+    "less": "^4.3.0",
+    "prettier": "^3.4.2",
+    "vite": "^6.3.5"
+  }
+}
