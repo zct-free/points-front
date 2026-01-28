@@ -4,8 +4,8 @@
       <a-form :model="filters" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
         <a-row :gutter="16">
           <a-col :span="6">
-            <a-form-item label="用户ID/用户名">
-              <a-input v-model:value="filters.keyword" placeholder="请输入用户ID或用户名" />
+            <a-form-item label="用户名">
+              <a-input v-model:value="filters.keyword" placeholder="请输入用户名" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
@@ -150,7 +150,6 @@ const reset = () => {
 
 const columns = [
   { title: "记录ID", dataIndex: "id", key: "id" },
-  { title: "用户ID", dataIndex: "userId", key: "userId" },
   { title: "用户名", dataIndex: "userName", key: "userName" },
   { title: "消耗类型", dataIndex: "type", key: "type" },
   {

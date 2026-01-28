@@ -52,8 +52,8 @@
     >
       <div class="view-detail-container">
         <div class="detail-item">
-          <span class="detail-label">交易单号：</span>
-          <span class="detail-value">{{ viewData.streamNo || "-" }}</span>
+          <span class="detail-label">账户昵称</span>
+          <span class="detail-value">{{ viewData.nickName || "-" }}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">积分变动：</span>
@@ -73,7 +73,7 @@
         </div>
 
         <div class="detail-item">
-          <span class="detail-label">创建时间：</span>
+          <span class="detail-label">获取时间：</span>
           <span class="detail-value">{{ viewData.createTime || "-" }}</span>
         </div>
       </div>
@@ -133,12 +133,7 @@ const columns = ref([
     dataIndex: "nickName",
     key: "nickName",
   },
-  {
-    title: "流水号",
-    dataIndex: "streamNo",
-    key: "streamNo",
-    width: 350,
-  },
+
   {
     title: "积分变动",
     dataIndex: "changeNum",
@@ -159,7 +154,7 @@ const columns = ref([
   },
 
   {
-    title: "交易时间",
+    title: "获取时间",
     dataIndex: "createTime",
     key: "createTime",
   },

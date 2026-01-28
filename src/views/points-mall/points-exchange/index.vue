@@ -47,8 +47,11 @@
     <!-- 新增/编辑模态框 -->
     <a-modal v-model:visible="modalVisible" :title="modalTitle" width="600px" @ok="handleModalOk" @cancel="resetForm">
       <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
-        <a-form-item label="订单编号" name="streamNo">
-          <a-input v-model:value="formState.streamNo" placeholder="请输入订单编号" :disabled="isEdit || isView" />
+        <a-form-item label="订单名称" name="streamNo">
+          <a-input v-model:value="formState.streamNo" placeholder="请输入订单名称" :disabled="isEdit || isView" />
+        </a-form-item>
+         <a-form-item label="快递单号" name="streamNo">
+          <a-input v-model:value="formState.streamNo" placeholder="请输入快递单号" :disabled="isEdit || isView" />
         </a-form-item>
         <a-form-item label="收货人姓名" name="nickName">
           <a-input v-model:value="formState.nickName" placeholder="请输入收货人姓名" :disabled="isEdit || isView" />
@@ -97,7 +100,7 @@
       @cancel="handleAddressModalCancel"
       width="1000px"
     >
-      <a-table :columns="addressColumns" :dataSource="addressData" ></a-table>
+      <a-table :columns="addressColumns" :dataSource="addressData"></a-table>
       <template #footer> <a-button @click="addressModalVisible = false">关闭</a-button> </template>
     </a-modal>
   </div>
@@ -118,11 +121,16 @@ const columns = [
     dataIndex: "streamNo",
     key: "streamNo",
   },
-  // {
-  //   title: "用户昵称",
-  //   dataIndex: "nickName",
-  //   key: "nickName",
-  // },
+  {
+    title: "订单名称",
+    dataIndex: "",
+    key: "",
+  },
+  {
+    title: "快递单号",
+    dataIndex: "",
+    key: "",
+  },
   {
     title: "订单状态",
     dataIndex: "orderStatus",

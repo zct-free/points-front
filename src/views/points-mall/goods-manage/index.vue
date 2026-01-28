@@ -34,14 +34,19 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'operation'">
-          <a-space>
+          <div class="table-action-tbns">
             <a @click="handleView(record)">查看</a>
-
             <a @click="handleEdit(record)">编辑</a>
             <a-popconfirm title="确定要删除吗?" @confirm="handleDelete(record.id)">
               <a style="color: red">删除</a>
             </a-popconfirm>
-          </a-space>
+            <a-popconfirm title="确定要下架该商品吗?" @confirm="handleUp(record)">
+              <a-button>下架</a-button>
+            </a-popconfirm>
+            <a-popconfirm title="确定要上架该商品吗?" @confirm="handleDown(record)">
+              <a-button>上架</a-button>
+            </a-popconfirm>
+          </div>
         </template>
         <template v-if="column.key === 'productType'">
           <a-tag :color="getProductTypeColor(record.productType)">
@@ -75,9 +80,9 @@
       :okButtonProps="{ disabled: isView }"
     >
       <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-        <a-form-item label="商品编码" name="productCode">
+        <!-- <a-form-item label="商品编码" name="productCode">
           <a-input v-model:value="formState.productCode" placeholder="请输入商品编码" :disabled="isView" />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item label="商品名称" name="productName">
           <a-input v-model:value="formState.productName" placeholder="请输入商品名称" :disabled="isView" />
         </a-form-item>
@@ -109,7 +114,7 @@
             :disabled="isView"
           />
         </a-form-item>
-        <a-form-item label="总库存" name="inventoryTotal">
+        <!-- <a-form-item label="总库存" name="inventoryTotal">
           <a-input-number
             v-model:value="formState.inventoryTotal"
             placeholder="请输入总库存"
@@ -118,7 +123,7 @@
             :precision="0"
             :disabled="isView"
           />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item label="可用库存" name="inventoryAvailable">
           <a-input-number
             v-model:value="formState.inventoryAvailable"
@@ -210,7 +215,6 @@ const columns = [
     title: "现金价值",
     dataIndex: "cashPrice",
     key: "cashPrice",
-
   },
 
   {
@@ -275,13 +279,13 @@ const formState = ref({
 
 // 表单验证规则
 const rules = {
-  productCode: [{ required: true, message: "请输入商品编码", trigger: "blur" }],
+  // productCode: [{ required: true, message: "请输入商品编码", trigger: "blur" }],
   productName: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
   productType: [{ required: true, message: "请选择商品类型", trigger: "change" }],
   categoryId: [{ required: true, message: "请输入分类ID", trigger: "blur" }],
   pointsCost: [{ required: true, message: "请输入所需积分", trigger: "blur" }],
   inventoryTotal: [{ required: true, message: "请输入总库存", trigger: "blur" }],
-  inventoryAvailable: [{ required: true, message: "请输入可用库存", trigger: "blur" }],
+  // inventoryAvailable: [{ required: true, message: "请输入可用库存", trigger: "blur" }],
   status: [{ required: true, message: "请选择商品状态", trigger: "change" }],
 };
 
@@ -414,6 +418,10 @@ const handleDelete = async id => {
     message.error("删除失败");
   }
 };
+// 上架
+const handleUp = async record => {};
+// 下架
+const handleDown = async record => {};
 
 // 批量删除
 const handleBatchDelete = async () => {

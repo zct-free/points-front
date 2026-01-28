@@ -14,6 +14,9 @@
       :loading="loading"
     >
       <template #bodyCell="{ column, record }">
+         <template v-if="column.key === 'avatar'">
+          <a-avatar :src="record?.avatar" />
+        </template>
         <template v-if="column.key === 'operation'">
           <a-space>
             <a @click="handleViewMembers(record)">查看</a>
@@ -87,7 +90,17 @@ const columns = [
     key: "groupName",
   },
   {
+    title: "群头像",
+    dataIndex: "avatar",
+    key: "avatar",
+  },
+  {
     title: "群组积分",
+    dataIndex: "totalPoints",
+    key: "totalPoints",
+  },
+  {
+    title: "可用积分",
     dataIndex: "totalPoints",
     key: "totalPoints",
   },
@@ -141,7 +154,7 @@ const memberColumns = [
     key: "availablePoints",
     width: 100,
   },
-   {
+  {
     title: "累计积分",
     dataIndex: "points",
     key: "points",

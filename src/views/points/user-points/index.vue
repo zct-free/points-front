@@ -4,7 +4,7 @@
       <a-row :gutter="16">
         <a-col span="5">
           <a-form-item label="用户搜索">
-            <a-input v-model:value="searchForm.nickName" placeholder="输入用户ID或用户昵称搜索" />
+            <a-input v-model:value="searchForm.nickName" placeholder="输入用户昵称搜索" />
           </a-form-item>
         </a-col>
         <a-col span="5">

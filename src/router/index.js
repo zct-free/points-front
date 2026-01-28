@@ -125,15 +125,15 @@ export const asyncRoutes = [
           role: ["fsgz"],
         },
       },
-      {
-        path: "Step-by-step",
-        name: "Step-by-step",
-        component: () => import("@/views/rules/step-by-step-rules.vue"),
-        meta: {
-          title: "阶梯奖励规则",
-          role: ["jtjlgz"],
-        },
-      },
+      // {
+      //   path: "Step-by-step",
+      //   name: "Step-by-step",
+      //   component: () => import("@/views/rules/step-by-step-rules.vue"),
+      //   meta: {
+      //     title: "阶梯奖励规则",
+      //     role: ["jtjlgz"],
+      //   },
+      // },
       {
         path: "user-level",
         name: "user-level",
