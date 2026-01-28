@@ -87,8 +87,10 @@ import { EyeOutlined } from "@ant-design/icons-vue";
 import { onMounted, ref } from "vue";
 
 const ruleMap = {
-  RULE: "奖励规则",
+  RULE: "任务奖励",
   PRODUCT: "商品兑换",
+  EXPIRE: "过期",
+  TRANSFER: "转赠",
 };
 // 状态管理
 const loading = ref(false);
@@ -149,7 +151,7 @@ const columns = ref([
     dataIndex: "streamType",
     key: "streamType",
     customRender: ({ text }) => {
-      return ruleMap[text] || "未知类型";
+      return ruleMap[text] || "";
     },
   },
 
@@ -218,7 +220,7 @@ const handleView = async record => {
 
 // 获取交易类型文本
 const getTransactionTypeText = type => {
-  return ruleMap[type] || "未知类型";
+  return ruleMap[type] || "";
 };
 </script>
 
