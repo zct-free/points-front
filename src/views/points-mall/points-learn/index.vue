@@ -5,28 +5,29 @@
         <a-row :gutter="16">
           <a-col :span="6">
             <a-form-item label="用户名">
-              <a-input v-model:value="filters.keyword" placeholder="请输入用户名" />
+              <a-input v-model:value="filters.nickName" placeholder="请输入用户名" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
             <a-form-item label="学习类型">
-              <a-select v-model:value="filters.type">
+              <a-select v-model:value="filters.learningType">
                 <a-select-option value="">全部类型</a-select-option>
-                <a-select-option value="课程学习">课程学习</a-select-option>
-                <a-select-option value="课程学习">课程学习</a-select-option>
+                <a-select-option v-for="item in learningTypeOptions" :value="item.dictValue">{{
+                  item.dictLabel
+                }}</a-select-option>
               </a-select>
             </a-form-item></a-col
           >
           <a-col :span="6">
             <a-form-item label="时间范围">
-              <a-range-picker v-model:value="filters.startDate" value-format="YYYY-MM-DD" />
+              <a-range-picker v-model:value="filters.time" value-format="YYYY-MM-DD" />
             </a-form-item>
           </a-col>
 
           <a-col :span="6">
             <a-form-item>
               <div class="search-form-btns">
-                <a-button type="primary" @click="doSearch">查询</a-button>
+                <a-button type="primary" @click="fetchData">查询</a-button>
                 <a-button @click="reset">重置</a-button>
                 <a-button type="primary" @click="exportData">导出报表</a-button>
               </div>
@@ -39,101 +40,20 @@
     </div>
 
     <div class="table-wrap">
-      <a-table :columns="columns" :data-source="dataSource" :pagination="pagination" />
+      <a-table :columns="columns" :data-source="dataSource" :pagination="pagination" :loading="tableLoading" />
     </div>
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { getPointsLearningReport } from "@/api/goods/index";
+import { useDictStore } from "@/store/dict.js";
+import { onMounted, ref } from "vue";
+const distStore = useDictStore();
+const learningTypeOptions = distStore.getDictData("points_task_type");
+const learningTypeMap=distStore.getDictMap("points_task_type");
+const filters = ref({ nickName: "", learningType: "", time: null });
 
-const filters = ref({ keyword: "", type: "", startDate: "", endDate: "" });
-
-const dataSource = ref([
-  {
-    id: "CONS20250101001",
-    userId: "U1001",
-    userName: "张三",
-    type: "兑换",
-    points: -500,
-    before: 2500,
-    after: 2000,
-    link: "商品：无线鼠标",
-    time: "2025-01-01 10:23:45",
-    status: "已完成",
-    statusCls: "green",
-    time: "2025-01-01 10:23:45",
-  },
-  {
-    id: "CONS20250101002",
-    userId: "U1002",
-    userName: "李四",
-    type: "转赠",
-    points: -200,
-    before: 1800,
-    after: 1600,
-    link: "转赠给：王五",
-    time: "2025-01-01 11:05:12",
-    status: "已完成",
-    time: "2025-01-01 10:23:45",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101003",
-    userId: "U1003",
-    userName: "王五",
-    type: "兑换",
-    points: -1200,
-    time: "2025-01-01 10:23:45",
-    before: 3200,
-    after: 2000,
-    link: "商品：蓝牙耳机",
-    time: "2025-01-01 12:15:30",
-    status: "待发货",
-    statusCls: "orange",
-  },
-  {
-    id: "CONS20250101004",
-    userId: "U1004",
-    userName: "赵六",
-    type: "过期",
-    points: -200,
-    time: "2025-01-01 10:23:45",
-    before: 1200,
-    after: 1000,
-    link: "2024年12月积分过期",
-    time: "2025-01-01 13:45:10",
-    status: "已完成",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101005",
-    userId: "U1005",
-    time: "2025-01-01 10:23:45",
-    userName: "孙七",
-    type: "转赠",
-    points: -100,
-    before: 800,
-    after: 700,
-    link: "转赠给：周八",
-    time: "2025-01-01 14:20:55",
-    status: "已完成",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101006",
-    userId: "U1006",
-    time: "2025-01-01 10:23:45",
-    userName: "周八",
-    type: "兑换",
-    points: -300,
-    before: 1000,
-    after: 700,
-    link: "商品：USB风扇",
-    time: "2025-01-01 15:30:20",
-    status: "处理中",
-    statusCls: "blue",
-  },
-]);
+const dataSource = ref([]);
 
 const pagination = ref({
   current: 1,
@@ -142,106 +62,63 @@ const pagination = ref({
   showTotal: total => `共 ${total} 条记录`,
   showSizeChanger: true,
   onChange: (p, ps) => {
-    page.value.current = p;
-    pageSize.value = ps;
+    pagination.value.current = p;
+    pagination.value.pageSize = ps;
+    fetchData();
   },
 });
-const doSearch = () => {
-  page.value.current = 1;
-};
+
 const reset = () => {
-  page.value.current = 1;
+  pagination.value.current = 1;
+  filters.value = { nickName: "", learningType: "", time: null };
+  fetchData();
 };
 
 const columns = [
-  { title: "记录ID", dataIndex: "id", key: "id" },
-  { title: "用户昵称", dataIndex: "userName", key: "userName" },
-  { title: "学习行为", dataIndex: "type", key: "type" },
+  { title: "记录ID", dataIndex: "streamNo", key: "streamNo",ellipsis: true },
+  { title: "用户昵称", dataIndex: "nickName", key: "nickName" },
+  // { title: "学习行为", dataIndex: "type", key: "type" },
+  // {
+  //   title: "学习内容",
+  //   dataIndex: "points",
+  //   key: "points",
+  // },
+  // { title: "学习时长", dataIndex: "before", key: "before" },
   {
-    title: "学习内容",
+    title: "获得积分",
     dataIndex: "points",
     key: "points",
   },
-  { title: "学习时长", dataIndex: "before", key: "before" },
-  {
-    title: "获得积分",
-    dataIndex: "link",
-    key: "link",
-  },
-  { title: "获取前余额", dataIndex: "time", key: "time" },
+  { title: "获取前余额", dataIndex: "beforeBalance", key: "beforeBalance" },
   {
     title: "获取后余额",
-    dataIndex: "status",
-    key: "status",
+    dataIndex: "afterBalance",
+    key: "afterBalance",
   },
   {
-    title: "学习时间",
-    dataIndex: "time",
-    key: "time",
+    title: "获取时间",
+    dataIndex: "createTime",
+    key: "createTime",
   },
 ];
+// 初始化加载数据
+onMounted(() => {
+  fetchData();
+});
+const  tableLoading = ref(false);
+const fetchData = async () => {
+  tableLoading.value = true;
+  const params = {
+    pageNo: pagination.value.current,
+    pageSize: pagination.value.pageSize,
+    beginDate: filters.value?.time?.[0] ?? null,
+    endDate: filters.value?.time?.[1] ?? null,
+    nickName: filters.value.nickName,
+    learningType: filters.value.learningType,
+  };
+  const res = await getPointsLearningReport(params);
+  dataSource.value = res?.data || [];
+  pagination.value.total = res?.total || 0;
+  tableLoading.value = false;
+};
 </script>
-<style scoped lang="less">
-.consumption-page {
-  padding: 20px;
-  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-.filter-bar {
-  background: #fff;
-  padding: 12px 16px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-}
-.filter-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.filter-row label {
-  color: #666;
-}
-.to {
-  margin: 0 6px;
-  color: #777;
-}
-.table-wrap {
-  margin-top: 12px;
-  background: #fff;
-  padding: 8px;
-  border-radius: 4px;
-}
-.neg {
-  color: #ff4d4f;
-}
-.link-info {
-  color: #999;
-}
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-}
-.status-badge.green {
-  background: #f6ffed;
-  color: #52c41a;
-  border: 1px solid #b7eb8f;
-}
-.status-badge.orange {
-  background: #fff7e6;
-  color: #fa8c16;
-  border: 1px solid #ffd591;
-}
-.status-badge.blue {
-  background: #e6f7ff;
-  color: #1890ff;
-  border: 1px solid #91d5ff;
-}
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 18px;
-}
-</style>

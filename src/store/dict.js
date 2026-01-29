@@ -1,4 +1,5 @@
-import { getDictDataApi } from "@/api/dict.js";
+import { getDictDataApi } from "@/api/dict/config";
+import { useUserStore } from "@/store/user.js";
 import { message } from "ant-design-vue";
 import { defineStore } from "pinia";
 
@@ -57,22 +58,12 @@ export const useDictStore = defineStore("dict", {
       await Promise.all(promises);
     },
     preloadCommonDict() {
+      const userStore = useUserStore();
+      if (!userStore.isLoggedIn) {
+        return;
+      }
       // 预加载常用字典数据的逻辑
-      const commonDictTypes = [
-        "approval_status",
-        "work_exprience",
-        "task_status",
-        "user_status",
-        "question_type",
-        "paper_status",
-        "test_type",
-        "exam_status",
-        "regular_evaluation_status",
-        "comprehensive_evaluation_status",
-        "comprehensive_evaluation_type",
-        "offer_status",
-        "next_operation",
-      ];
+      const commonDictTypes = ["points_consumption_type", "points_task_type"];
       this.loadDictTypes(commonDictTypes);
     },
   },

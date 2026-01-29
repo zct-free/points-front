@@ -1,33 +1,33 @@
 <template>
-  <div class="consumption-page">
-    <div class="filter-bar">
-      <a-form :model="filters" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+  <div>
+    <div class="search-form">
+      <a-form :model="filters" :wrapper-col="{ span: 16 }">
         <a-row :gutter="16">
           <a-col :span="6">
             <a-form-item label="用户名">
-              <a-input v-model:value="filters.keyword" placeholder="请输入用户名" />
+              <a-input v-model:value="filters.nickName" placeholder="请输入用户名" />
             </a-form-item>
           </a-col>
           <a-col :span="6">
             <a-form-item label="消耗类型">
-              <a-select v-model:value="filters.type">
-                <a-select-option value="">全部类型</a-select-option>
-                <a-select-option value="兑换">积分兑换</a-select-option>
-                <a-select-option value="转赠">积分转赠</a-select-option>
-                <a-select-option value="过期">积分过期</a-select-option>
+              <a-select v-model:value="filters.consumptionType">
+                <a-select-option :value="null">全部类型</a-select-option>
+                <a-select-option v-for="item in learningTypeOptions" :value="item.dictValue">{{
+                  item.dictLabel
+                }}</a-select-option>
               </a-select>
             </a-form-item></a-col
           >
           <a-col :span="6">
             <a-form-item label="时间范围">
-              <a-range-picker v-model:value="filters.startDate" value-format="YYYY-MM-DD" />
+              <a-range-picker v-model:value="filters.time" value-format="YYYY-MM-DD HH:mm:ss" show-time />
             </a-form-item>
           </a-col>
 
           <a-col :span="6">
             <a-form-item>
               <div class="search-form-btns">
-                <a-button type="primary" @click="doSearch">查询</a-button>
+                <a-button type="primary" @click="fetchData">查询</a-button>
                 <a-button @click="reset">重置</a-button>
                 <a-button type="primary" @click="exportData">导出数据</a-button>
               </div>
@@ -38,97 +38,20 @@
         </a-row>
       </a-form>
     </div>
-
-    <div class="table-wrap">
-      <a-table :columns="columns" :data-source="dataSource" :pagination="pagination" />
-    </div>
+    <a-table :columns="columns" :data-source="dataSource" :pagination="pagination" :loading="tableLoading" />
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { getPointsConsumptionLogs } from "@/api/goods/index";
+import { useDictStore } from "@/store/dict.js";
+import { onMounted, ref } from "vue";
+const distStore = useDictStore();
+const learningTypeOptions = distStore.getDictData("points_consumption_type");
+const learningTypeMap = distStore.getDictMap("points_consumption_type");
 
-const filters = ref({ keyword: "", type: "", startDate: "", endDate: "" });
+const filters = ref({ nickName: null, consumptionType: null, time: null });
 
-const dataSource = ref([
-  {
-    id: "CONS20250101001",
-    userId: "U1001",
-    userName: "张三",
-    type: "兑换",
-    points: -500,
-    before: 2500,
-    after: 2000,
-    link: "商品：无线鼠标",
-    time: "2025-01-01 10:23:45",
-    status: "已完成",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101002",
-    userId: "U1002",
-    userName: "李四",
-    type: "转赠",
-    points: -200,
-    before: 1800,
-    after: 1600,
-    link: "转赠给：王五",
-    time: "2025-01-01 11:05:12",
-    status: "已完成",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101003",
-    userId: "U1003",
-    userName: "王五",
-    type: "兑换",
-    points: -1200,
-    before: 3200,
-    after: 2000,
-    link: "商品：蓝牙耳机",
-    time: "2025-01-01 12:15:30",
-    status: "待发货",
-    statusCls: "orange",
-  },
-  {
-    id: "CONS20250101004",
-    userId: "U1004",
-    userName: "赵六",
-    type: "过期",
-    points: -200,
-    before: 1200,
-    after: 1000,
-    link: "2024年12月积分过期",
-    time: "2025-01-01 13:45:10",
-    status: "已完成",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101005",
-    userId: "U1005",
-    userName: "孙七",
-    type: "转赠",
-    points: -100,
-    before: 800,
-    after: 700,
-    link: "转赠给：周八",
-    time: "2025-01-01 14:20:55",
-    status: "已完成",
-    statusCls: "green",
-  },
-  {
-    id: "CONS20250101006",
-    userId: "U1006",
-    userName: "周八",
-    type: "兑换",
-    points: -300,
-    before: 1000,
-    after: 700,
-    link: "商品：USB风扇",
-    time: "2025-01-01 15:30:20",
-    status: "处理中",
-    statusCls: "blue",
-  },
-]);
+const dataSource = ref([]);
 
 const pagination = ref({
   current: 1,
@@ -139,100 +62,62 @@ const pagination = ref({
   onChange: (p, ps) => {
     page.value.current = p;
     pageSize.value = ps;
+    fetchData();
   },
 });
-const doSearch = () => {
-  page.value.current = 1;
-};
+const tableLoading = ref(false);
+
 const reset = () => {
-  page.value.current = 1;
+  filters.value = { nickName: null, consumptionType: null, time: null };
+  pagination.value.current = 1;
+  fetchData();
 };
 
 const columns = [
-  { title: "记录ID", dataIndex: "id", key: "id" },
-  { title: "用户名", dataIndex: "userName", key: "userName" },
-  { title: "消耗类型", dataIndex: "type", key: "type" },
+  { title: "记录ID", dataIndex: "streamNo", key: "streamNo", ellipsis: true },
+  { title: "用户名", dataIndex: "nickName", key: "nickName" },
+  {
+    title: "消耗类型",
+    dataIndex: "consumptionType",
+    key: "consumptionType",
+    customRender: ({ text }) => text ? learningTypeMap[text] :''
+  },
   {
     title: "消耗积分",
-    dataIndex: "points",
-    key: "points",
+    dataIndex: "changeNum",
+    key: "changeNum",
   },
-  { title: "消耗前余额", dataIndex: "before", key: "before" },
-  { title: "消耗后余额", dataIndex: "after", key: "after" },
+  { title: "消耗前余额", dataIndex: "beforePoints", key: "beforePoints" },
+  { title: "消耗后余额", dataIndex: "afterPoints", key: "afterPoints" },
   {
     title: "关联信息",
-    dataIndex: "link",
-    key: "link",
+    dataIndex: "relationInfo",
+    key: "relationInfo",
   },
-  { title: "消耗时间", dataIndex: "time", key: "time" },
+  { title: "消耗时间", dataIndex: "createTime", key: "createTime" },
   {
     title: "状态",
     dataIndex: "status",
     key: "status",
   },
 ];
+onMounted(() => {
+  fetchData();
+});
+const fetchData = async () => {
+  tableLoading.value = true;
+  const params = {
+    pageNo: pagination.value.current,
+    pageSize: pagination.value.pageSize,
+    beginDate: filters.value?.time?.[0] ?? null,
+    endDate: filters.value?.time?.[1] ?? null,
+    nickName: filters.value.nickName,
+    consumptionType: filters.value.consumptionType,
+  };
+  const res = await getPointsConsumptionLogs(params);
+  tableLoading.value = false;
+  dataSource.value = res?.data || [];
+  pagination.value.total = res?.total || 0;
+};
 </script>
-<style scoped lang="less">
-.consumption-page {
-  padding: 20px;
-  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-.filter-bar {
-  background: #fff;
-  padding: 12px 16px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-}
-.filter-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.filter-row label {
-  color: #666;
-}
-.to {
-  margin: 0 6px;
-  color: #777;
-}
-.table-wrap {
-  margin-top: 12px;
-  background: #fff;
-  padding: 8px;
-  border-radius: 4px;
-}
-.neg {
-  color: #ff4d4f;
-}
-.link-info {
-  color: #999;
-}
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-}
-.status-badge.green {
-  background: #f6ffed;
-  color: #52c41a;
-  border: 1px solid #b7eb8f;
-}
-.status-badge.orange {
-  background: #fff7e6;
-  color: #fa8c16;
-  border: 1px solid #ffd591;
-}
-.status-badge.blue {
-  background: #e6f7ff;
-  color: #1890ff;
-  border: 1px solid #91d5ff;
-}
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 18px;
-}
-</style>
+<style scoped lang="less"></style>

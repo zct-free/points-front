@@ -1,9 +1,9 @@
 <template>
   <div class="new-active">
     <div class="table-operations">
-      <a-form :model="searchForm" ref="searchFormRef" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+      <a-form :model="searchForm" ref="searchFormRef" >
         <a-row :gutter="16">
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="账户状态" name="status">
               <a-select v-model:value="searchForm.status" placeholder="选择账户状态" allowClear>
                 <a-select-option :value="1">正常</a-select-option>
@@ -12,7 +12,7 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="用户等级" name="level">
               <a-select v-model:value="searchForm.level" placeholder="选择用户等级" allowClear>
                 <a-select-option value="0">普通会员</a-select-option>
@@ -23,12 +23,12 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="用户昵称" name="nickName">
               <a-input v-model:value="searchForm.nickName" placeholder="输入用户昵称搜索" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="4">
             <a-space>
               <a-button type="primary" @click="fetchData"> 搜索 </a-button>
               <a-button @click="resetForm"> 重置 </a-button>

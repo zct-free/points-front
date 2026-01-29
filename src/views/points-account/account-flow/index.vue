@@ -140,6 +140,9 @@ const columns = ref([
     title: "积分变动",
     dataIndex: "changeNum",
     key: "changeNum",
+    customRender: ({ text }) => {
+      return activeTab.value === "income" ?  `+${text}` : `${text}`;
+    },
   },
   {
     title: "当前余额",

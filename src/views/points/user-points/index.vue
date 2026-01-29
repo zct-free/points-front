@@ -17,8 +17,10 @@
         </a-col>
         <a-col span="4">
           <a-form-item>
-            <a-button type="primary" @click="fetchData">搜索</a-button>
-            <a-button @click="resetForm">重置</a-button>
+            <div class="search-form-btns">
+              <a-button type="primary" @click="fetchData">搜索</a-button>
+              <a-button @click="resetForm">重置</a-button>
+            </div>
           </a-form-item>
         </a-col>
       </a-row>

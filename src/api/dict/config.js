@@ -1,11 +1,15 @@
 import request from "@/utils/request";
 
 // 查询字典数据列表
-export function listData(query) {
+export function getDictDataApi(dictType) {
   return request({
     url: "/system/dict/data/list",
     method: "get",
-    params: query,
+    params: {
+      dictType,
+      pageNum: 1,
+      pageSize: 1000,
+    },
   });
 }
 

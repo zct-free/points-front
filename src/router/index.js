@@ -12,6 +12,7 @@
  * - children: RouteRecordRaw[] - 子路由数组，用于多级菜单或嵌套路由。
  */
 import AdminLayout from "@/layouts/AdminLayout.vue"; // Import the main layout
+import { useDictStore } from "@/store/dict.js"; // Import dict store
 import { useUserStore } from "@/store/user.js"; // Import user store
 import Cookies from "js-cookie"; // Import Cookies for token management
 import { createRouter, createWebHistory } from "vue-router";
@@ -261,8 +262,7 @@ let hasAddedRoutes = false;
 
 router.beforeEach(async (to, _from, next) => {
   const userStore = useUserStore();
-  next();
-  return;
+  const dictStore = useDictStore();
   // 如果访问404页面，直接放行
   if (to.path === "/404") {
     next();
@@ -284,6 +284,7 @@ router.beforeEach(async (to, _from, next) => {
     try {
       if (!hasAddedRoutes) {
         userStore.fetchUserInfo();
+        dictStore.preloadCommonDict();
         const accessRoutes = await userStore.generateRoutes();
         addAsyncRoutes(accessRoutes);
         await new Promise(resolve => setTimeout(resolve, 30));

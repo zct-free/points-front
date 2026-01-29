@@ -14,8 +14,8 @@
       :loading="loading"
     >
       <template #bodyCell="{ column, record }">
-         <template v-if="column.key === 'avatar'">
-          <a-avatar :src="record?.avatar" />
+        <template v-if="column.key === 'groupCover'">
+          <a-avatar :src="record?.groupCover" />
         </template>
         <template v-if="column.key === 'operation'">
           <a-space>
@@ -56,9 +56,7 @@
             <a-tag>{{ levelMap[record.level] || "普通会员" }}</a-tag>
           </template>
           <template v-if="column.key === 'avatar'">
-            <a-avatar :src="record.avatar" size="small">
-              {{ record.nickName?.charAt(0) }}
-            </a-avatar>
+            <a-avatar :src="record?.avatar" size="small" />
           </template>
         </template>
       </a-table>
@@ -91,8 +89,8 @@ const columns = [
   },
   {
     title: "群头像",
-    dataIndex: "avatar",
-    key: "avatar",
+    dataIndex: "groupCover",
+    key: "groupCover",
   },
   {
     title: "群组积分",

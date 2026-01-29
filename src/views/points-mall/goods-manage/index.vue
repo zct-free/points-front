@@ -90,8 +90,6 @@
           <a-select v-model:value="formState.productType" placeholder="请选择商品类型" :disabled="isView">
             <a-select-option :value="1">实物商品</a-select-option>
             <a-select-option :value="2">虚拟商品</a-select-option>
-            <a-select-option :value="3">优惠券</a-select-option>
-            <a-select-option :value="4">服务</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="所需积分" name="pointsCost">
@@ -124,7 +122,7 @@
             :disabled="isView"
           />
         </a-form-item> -->
-        <a-form-item label="可用库存" name="inventoryAvailable">
+        <!-- <a-form-item label="可用库存" name="inventoryAvailable">
           <a-input-number
             v-model:value="formState.inventoryAvailable"
             placeholder="请输入可用库存"
@@ -133,8 +131,8 @@
             :precision="0"
             :disabled="isView"
           />
-        </a-form-item>
-        <a-form-item label="限购数量" name="limitPerUser">
+        </a-form-item> -->
+        <!-- <a-form-item label="限购数量" name="limitPerUser">
           <a-input-number
             v-model:value="formState.limitPerUser"
             placeholder="请输入每人限购数量"
@@ -153,7 +151,7 @@
             :precision="0"
             :disabled="isView"
           />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item label="主图URL" name="imageUrl">
           <a-input v-model:value="formState.imageUrl" placeholder="请输入主图URL" :disabled="isView" v-if="!isView" />
           <a-image :src="formState.imageUrl" v-else="isView" :width="50" />
@@ -162,7 +160,6 @@
           <a-select v-model:value="formState.status" placeholder="请选择商品状态" :disabled="isView">
             <a-select-option :value="0">下架</a-select-option>
             <a-select-option :value="1">上架</a-select-option>
-            <a-select-option :value="2">售罄</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="商品描述" name="productDesc">

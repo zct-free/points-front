@@ -20,3 +20,12 @@ export const addPointsProduct = (params) => {
 export const updatePointsProduct = params => {
   return request.put("/points/product/update", params);
 };
+
+// 积分消耗轨迹
+export const getPointsConsumptionLogs = params => {
+  return request.get("/points/pointsStream/consumptionTrajectory", { params });
+};
+// 积分学习报表
+export const getPointsLearningReport = params => {
+  return request.get("/points/pointsStream/learningReport", { params });
+};
