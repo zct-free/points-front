@@ -13,7 +13,7 @@
  */
 import AdminLayout from "@/layouts/AdminLayout.vue"; // Import the main layout
 import { useDictStore } from "@/store/dict.js"; // Import dict store
-import { useUserStore } from "@/store/user.js"; // Import user store
+import { useUserStore } from "@/store/user.js"; // Import user storeiek
 import Cookies from "js-cookie"; // Import Cookies for token management
 import { createRouter, createWebHistory } from "vue-router";
 const routes = [
