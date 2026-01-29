@@ -194,6 +194,15 @@ export const asyncRoutes = [
         },
       },
       {
+        path: "redemption-record",
+        name: "redemption-record",
+        component: () => import("@/views/points-mall/redemption-history/index.vue"),
+        meta: {
+          title: "兑换记录",
+          role: ["jfdh"],
+        },
+      },
+      {
         path: "points-consumption",
         name: "points-consumption",
         component: () => import("@/views/points-mall/points-consumption/index.vue"),

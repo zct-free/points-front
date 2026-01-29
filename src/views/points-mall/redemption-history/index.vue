@@ -3,12 +3,12 @@
     <div>
       <a-form :model="searchForm" ref="searchFormRef">
         <a-row :gutter="16">
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="商品名称" name="productName">
               <a-input v-model:value="searchForm.productName" placeholder="输入商品名称搜索"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="商品类型" name="orderStatus">
               <a-select v-model:value="searchForm.orderStatus" placeholder="请选择商品类型">
                 <a-select-option value="">全部类型</a-select-option>
@@ -18,17 +18,17 @@
             </a-form-item>
           </a-col>
 
-          <a-col :span="6">
-            <a-form-item label="排序" name="sortBy">
+          <a-col :span="4">
+            <a-form-item label="发货状态" name="sortBy">
               <a-select v-model:value="searchForm.sortBy" placeholder="请选择排序方式">
-                <a-select-option value="pointsConsume_asc">默认排序</a-select-option>
-                <a-select-option value="pointsConsume_asc">积分从低到高</a-select-option>
-                <a-select-option value="pointsConsume_desc">积分从高到低</a-select-option>
+                <a-select-option value="pointsConsume_asc">全部</a-select-option>
+                <a-select-option value="pointsConsume_asc">已发货</a-select-option>
+                <a-select-option value="pointsConsume_desc">未发货</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
 
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item>
               <div class="search-form-btns">
                 <a-button type="primary" @click="fetchData"> 查询 </a-button>
@@ -59,6 +59,11 @@ import ExchangeRecord from "./ExchangeRecord.vue";
 // 表格列配置
 const columns = [
   {
+    title: "兑换编号",
+    dataIndex: "productName",
+    key: "productName",
+  },
+  {
     title: "商品名称",
     dataIndex: "productName",
     key: "productName",
@@ -69,12 +74,12 @@ const columns = [
     key: "",
   },
   {
-    title: "兑换积分",
+    title: "消耗积分",
     dataIndex: "pointsConsume",
     key: "pointsConsume",
   },
   {
-    title: "处理状态",
+    title: "发货状态",
     dataIndex: "orderStatus",
     key: "orderStatus",
   },
