@@ -256,7 +256,7 @@ export const asyncRoutes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: routes.concat(asyncRoutes),
+  routes: import.meta.env.PROD ? routes : routes.concat(asyncRoutes),
 });
 let hasAddedRoutes = false;
 

@@ -4,8 +4,8 @@ export const to = async fn => {
   }
   try {
     const result = await fn;
-    return [result, null];
+    return [null, result];
   } catch (error) {
-    return [null, error];
+    return [error, null];
   }
 };

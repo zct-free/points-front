@@ -117,7 +117,8 @@ service.interceptors.response.use(
     switch (data.code) {
       case 401:
         message.error("登录已过期，请重新登录");
-        localStorage.removeItem("token");
+        localStorage.clear();
+        Cookies.remove("Admin-Token");
         // 跳转到登录页
         window.location.href = "/login";
         break;

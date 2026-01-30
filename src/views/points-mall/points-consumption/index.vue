@@ -10,17 +10,17 @@
           </a-col>
           <a-col :span="6">
             <a-form-item label="消耗类型">
-              <a-select v-model:value="filters.consumptionType">
-                <a-select-option :value="null">全部类型</a-select-option>
-                <a-select-option v-for="item in learningTypeOptions" :value="item.dictValue">{{
-                  item.dictLabel
-                }}</a-select-option>
-              </a-select>
-            </a-form-item></a-col
-          >
+              <DictSelect
+                dictType="points_consumption_type"
+                defaultOption="全部类型"
+                v-model:value="filters.consumptionType"
+              >
+              </DictSelect>
+            </a-form-item>
+          </a-col>
           <a-col :span="6">
             <a-form-item label="时间范围">
-              <a-range-picker v-model:value="filters.time" value-format="YYYY-MM-DD HH:mm:ss" show-time />
+              <a-range-picker v-model:value="filters.time" value-format="YYYY-MM-DD" />
             </a-form-item>
           </a-col>
 
@@ -46,9 +46,7 @@ import { getPointsConsumptionLogs } from "@/api/goods/index";
 import { useDictStore } from "@/store/dict.js";
 import { onMounted, ref } from "vue";
 const distStore = useDictStore();
-const learningTypeOptions = distStore.getDictData("points_consumption_type");
 const learningTypeMap = distStore.getDictMap("points_consumption_type");
-
 const filters = ref({ nickName: null, consumptionType: null, time: null });
 
 const dataSource = ref([]);
@@ -80,7 +78,7 @@ const columns = [
     title: "消耗类型",
     dataIndex: "consumptionType",
     key: "consumptionType",
-    customRender: ({ text }) => text ? learningTypeMap[text] :''
+    customRender: ({ text }) => (text ? learningTypeMap[text] : ""),
   },
   {
     title: "消耗积分",
@@ -95,11 +93,11 @@ const columns = [
     key: "relationInfo",
   },
   { title: "消耗时间", dataIndex: "createTime", key: "createTime" },
-  {
-    title: "状态",
-    dataIndex: "status",
-    key: "status",
-  },
+  // {
+  //   title: "状态",
+  //   dataIndex: "status",
+  //   key: "status",
+  // },
 ];
 onMounted(() => {
   fetchData();

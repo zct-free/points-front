@@ -1,7 +1,7 @@
 <template>
   <div class="consumption-page">
     <div class="filter-bar">
-      <a-form :model="filters" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+      <a-form :model="filters" :wrapper-col="{ span: 16 }">
         <a-row :gutter="16">
           <a-col :span="6">
             <a-form-item label="用户名">
@@ -10,14 +10,9 @@
           </a-col>
           <a-col :span="6">
             <a-form-item label="学习类型">
-              <a-select v-model:value="filters.learningType">
-                <a-select-option value="">全部类型</a-select-option>
-                <a-select-option v-for="item in learningTypeOptions" :value="item.dictValue">{{
-                  item.dictLabel
-                }}</a-select-option>
-              </a-select>
-            </a-form-item></a-col
-          >
+              <DictSelect dictType="points_task_type" defaultOption="全部类型" v-model:value="filters.learningType" />
+            </a-form-item>
+          </a-col>
           <a-col :span="6">
             <a-form-item label="时间范围">
               <a-range-picker v-model:value="filters.time" value-format="YYYY-MM-DD" />
@@ -50,8 +45,8 @@ import { useDictStore } from "@/store/dict.js";
 import { onMounted, ref } from "vue";
 const distStore = useDictStore();
 const learningTypeOptions = distStore.getDictData("points_task_type");
-const learningTypeMap=distStore.getDictMap("points_task_type");
-const filters = ref({ nickName: "", learningType: "", time: null });
+const learningTypeMap = distStore.getDictMap("points_task_type");
+const filters = ref({ nickName: "", learningType: null, time: null });
 
 const dataSource = ref([]);
 
@@ -75,7 +70,7 @@ const reset = () => {
 };
 
 const columns = [
-  { title: "记录ID", dataIndex: "streamNo", key: "streamNo",ellipsis: true },
+  { title: "记录ID", dataIndex: "streamNo", key: "streamNo", ellipsis: true },
   { title: "用户昵称", dataIndex: "nickName", key: "nickName" },
   // { title: "学习行为", dataIndex: "type", key: "type" },
   // {
@@ -105,7 +100,7 @@ const columns = [
 onMounted(() => {
   fetchData();
 });
-const  tableLoading = ref(false);
+const tableLoading = ref(false);
 const fetchData = async () => {
   tableLoading.value = true;
   const params = {
