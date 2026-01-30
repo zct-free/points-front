@@ -8,7 +8,7 @@ set -e  # 遇到错误立即退出
 
 # ==================== 配置区域 ====================
 # 获取环境参数，默认为test
-ENV=${1:-stage}
+ENV=${1:-test}
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # 文件命名配置
@@ -19,27 +19,20 @@ VERSION=$(grep '"version"' package.json 2>/dev/null | sed 's/.*"version": *"\([^
 ARCHIVE_NAME="${PROJECT_NAME}.tar.gz"
 
 # 服务器配置
-SERVER_PORT="2618"  # SSH连接端口
+SERVER_PORT="22"  # SSH连接端口
 
 case $ENV in
-    "stage")
-        SERVER_HOST="140.210.90.103"
-        SERVER_USER="root"
-        SERVER_PATH="/root/nginx/html"
-        BUILD_CMD="pnpm build:stage"
-        REMOTE_FILENAME="points-front.tar.gz"
-        ;;
     "test")
-        SERVER_HOST="140.210.90.103"
+        SERVER_HOST="192.168.187.3"
         SERVER_USER="root"
-        SERVER_PATH="/root/nginx/html"
+        SERVER_PATH="/app/html"
         BUILD_CMD="pnpm build:test"
         REMOTE_FILENAME="points-front.tar.gz"
         ;;
     "prod")
-        SERVER_HOST="140.210.90.103"
+        SERVER_HOST="192.168.187.3"
         SERVER_USER="root"
-        SERVER_PATH="/root/nginx/html"
+        SERVER_PATH="/app/html"
         BUILD_CMD="pnpm build:prod"
         REMOTE_FILENAME="points-front.tar.gz"
         ;;
@@ -72,7 +65,6 @@ check_command() {
 }
 
 # ==================== 主要流程 ====================
-log_info "开始部署 ruoyi 前端项目"
 log_info "目标环境: $ENV"
 log_info "项目版本: $VERSION"
 log_info "目标服务器: $SERVER_USER@$SERVER_HOST:$SERVER_PORT"
