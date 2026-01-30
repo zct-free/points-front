@@ -103,7 +103,7 @@
             :precision="0"
           />
         </a-form-item>
-        <a-form-item label="有效期（天）" name="effectiveDay">
+        <!-- <a-form-item label="有效期（天）" name="effectiveDay">
           <a-input-number
             v-model:value="formState.effectiveDay"
             placeholder="请输入积分有效期(天)"
@@ -111,7 +111,7 @@
             :min="0"
             :precision="0"
           />
-        </a-form-item>
+        </a-form-item> -->
 
         <!-- <a-form-item label="规则描述" name="description">
           <a-textarea v-model:value="formState.description" placeholder="请输入规则描述" :rows="4" />
@@ -140,11 +140,11 @@ const columns = [
     dataIndex: "ruleName",
     key: "ruleName",
   },
-  {
-    title: "规则类型",
-    dataIndex: "ruleType",
-    key: "ruleType",
-  },
+  // {
+  //   title: "规则类型",
+  //   dataIndex: "ruleType",
+  //   key: "ruleType",
+  // },
   {
     title: "每日最大次数",
     dataIndex: "dayMaxNumber",
@@ -160,11 +160,11 @@ const columns = [
   //   dataIndex: "priority",
   //   key: "priority",
   // },
-  {
-    title: "有效期(天)",
-    dataIndex: "effectiveDay",
-    key: "effectiveDay",
-  },
+  // {
+  //   title: "有效期(天)",
+  //   dataIndex: "effectiveDay",
+  //   key: "effectiveDay",
+  // },
   // {
   //   title: "累计计算",
   //   dataIndex: "isCumulative",

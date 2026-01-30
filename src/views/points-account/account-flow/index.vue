@@ -1,6 +1,6 @@
 <template>
   <div class="points-transaction">
-    <a-form :model="searchForm" ref="searchFormRef">
+    <a-form :model="searchForm" ref="searchFormRef"  :wrapper-col="{ span: 24 }" >
       <a-row :gutter="16">
         <a-col :span="5">
           <a-form-item label="用户昵称" name="nickName">
@@ -8,13 +8,12 @@
           </a-form-item>
         </a-col>
 
-        <a-col :span="10">
+        <a-col :span="8">
           <a-form-item label="日期范围" name="dateRange">
             <a-range-picker
               v-model:value="searchForm.dateRange"
               value-format="YYYY-MM-DD HH:mm:ss"
               show-time
-              style="width: 100%;"
               format="YYYY-MM-DD HH:mm:ss"
             />
           </a-form-item>
