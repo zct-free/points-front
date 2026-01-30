@@ -1,25 +1,25 @@
 <template>
   <div class="consumption-page">
     <div class="filter-bar">
-      <a-form :model="filters" :wrapper-col="{ span: 16 }">
+      <a-form :model="filters">
         <a-row :gutter="16">
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="用户名">
               <a-input v-model:value="filters.nickName" placeholder="请输入用户名" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="5">
             <a-form-item label="学习类型">
               <DictSelect dictType="points_task_type" defaultOption="全部类型" v-model:value="filters.learningType" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <a-form-item label="时间范围">
               <a-range-picker v-model:value="filters.time" value-format="YYYY-MM-DD" />
             </a-form-item>
           </a-col>
 
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item>
               <div class="search-form-btns">
                 <a-button type="primary" @click="fetchData">查询</a-button>
@@ -43,9 +43,9 @@
 import { getPointsLearningReport } from "@/api/goods/index";
 import { useDictStore } from "@/store/dict.js";
 import { onMounted, ref } from "vue";
-const distStore = useDictStore();
-const learningTypeOptions = distStore.getDictData("points_task_type");
-const learningTypeMap = distStore.getDictMap("points_task_type");
+const dicStore = useDictStore();
+
+const learningTypeMap = dicStore.getDictMap("points_task_type");
 const filters = ref({ nickName: "", learningType: null, time: null });
 
 const dataSource = ref([]);
@@ -70,9 +70,9 @@ const reset = () => {
 };
 
 const columns = [
-  { title: "记录ID", dataIndex: "streamNo", key: "streamNo", ellipsis: true },
+  // { title: "记录ID", dataIndex: "streamNo", key: "streamNo", ellipsis: true },
   { title: "用户昵称", dataIndex: "nickName", key: "nickName" },
-  // { title: "学习行为", dataIndex: "type", key: "type" },
+  { title: "积分奖励类型", dataIndex: "taskName", key: "taskName", ellipsis: true },
   // {
   //   title: "学习内容",
   //   dataIndex: "points",

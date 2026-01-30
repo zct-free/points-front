@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="search-form">
-      <a-form :model="filters" :wrapper-col="{ span: 16 }">
+      <a-form :model="filters">
         <a-row :gutter="16">
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item label="用户名">
               <a-input v-model:value="filters.nickName" placeholder="请输入用户名" />
             </a-form-item>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="5">
             <a-form-item label="消耗类型">
               <DictSelect
                 dictType="points_consumption_type"
@@ -24,7 +24,7 @@
             </a-form-item>
           </a-col>
 
-          <a-col :span="6">
+          <a-col :span="4">
             <a-form-item>
               <div class="search-form-btns">
                 <a-button type="primary" @click="fetchData">查询</a-button>
@@ -72,7 +72,7 @@ const reset = () => {
 };
 
 const columns = [
-  { title: "记录ID", dataIndex: "streamNo", key: "streamNo", ellipsis: true },
+  // { title: "记录ID", dataIndex: "streamNo", key: "streamNo", ellipsis: true },
   { title: "用户名", dataIndex: "nickName", key: "nickName" },
   {
     title: "消耗类型",

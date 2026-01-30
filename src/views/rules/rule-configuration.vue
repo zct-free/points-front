@@ -62,41 +62,41 @@
       :cancel-text="'关闭'"
       :mask-closable="false"
     >
-      <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }">
+      <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
         <!-- <a-form-item label="规则编码" name="ruleCode">
           <a-input v-model:value="formState.ruleCode" placeholder="请输入规则唯一编码" :disabled="isEdit" />
         </a-form-item> -->
-        <a-form-item label="规则名称" name="ruleName">
-          <a-input v-model:value="formState.ruleName" placeholder="请输入规则名称" />
+        <a-form-item label="规则名称" name="taskName">
+          <a-input v-model:value="formState.taskName" placeholder="请输入规则名称" />
         </a-form-item>
-        <a-form-item label="规则类型" name="ruleType">
+        <!-- <a-form-item label="规则类型" name="ruleType">
           <a-select v-model:value="formState.ruleType" placeholder="请选择规则类型">
             <a-select-option :value="1">行为奖励</a-select-option>
             <a-select-option :value="2">任务奖励</a-select-option>
             <a-select-option :value="3">活动奖励</a-select-option>
             <a-select-option :value="4">手动调整</a-select-option>
           </a-select>
-        </a-form-item>
+        </a-form-item> -->
 
-        <a-form-item label="状态" name="status">
+        <!-- <a-form-item label="状态" name="status">
           <a-select v-model:value="formState.status" placeholder="请选择状态">
             <a-select-option :value="0">禁用</a-select-option>
             <a-select-option :value="1">启用</a-select-option>
             <a-select-option :value="2">测试中</a-select-option>
           </a-select>
-        </a-form-item>
-        <a-form-item label="奖励积分" name="rewardPoints">
+        </a-form-item> -->
+        <a-form-item label="奖励积分" name="taskValue">
           <a-input-number
-            v-model:value="formState.rewardPoints"
+            v-model:value="formState.taskValue"
             placeholder="请输入奖励积分"
             style="width: 100%"
             :min="0"
             :precision="0"
           />
         </a-form-item>
-        <a-form-item label="每日最大次数" name="dayMaxNumber">
+        <a-form-item label="每日最大次数" name="dailyMaximumValue">
           <a-input-number
-            v-model:value="formState.dayMaxNumber"
+            v-model:value="formState.dailyMaximumValue"
             placeholder="请输入每日最大次数"
             style="width: 100%"
             :min="0"
@@ -132,13 +132,13 @@ import { onMounted, ref } from "vue";
 const columns = [
   {
     title: "规则编码",
-    dataIndex: "ruleCode",
-    key: "ruleCode",
+    dataIndex: "taskCode",
+    key: "taskCode",
   },
   {
     title: "规则名称",
-    dataIndex: "ruleName",
-    key: "ruleName",
+    dataIndex: "taskName",
+    key: "taskName",
   },
   // {
   //   title: "规则类型",
@@ -147,14 +147,14 @@ const columns = [
   // },
   {
     title: "每日最大次数",
-    dataIndex: "dayMaxNumber",
-    key: "dayMaxNumber",
+    dataIndex: "dailyMaximumValue",
+    key: "dailyMaximumValue",
   },
-  {
-    title: "状态",
-    dataIndex: "status",
-    key: "status",
-  },
+  // {
+  //   title: "状态",
+  //   dataIndex: "status",
+  //   key: "status",
+  // },
   // {
   //   title: "优先级",
   //   dataIndex: "priority",
@@ -183,13 +183,12 @@ const columns = [
   // },
   {
     title: "奖励积分",
-    dataIndex: "rewardPoints",
-    key: "rewardPoints",
+    dataIndex: "taskValue",
+    key: "taskValue",
   },
   {
     title: "操作",
     key: "operation",
-    fixed: "right",
   },
 ];
 
@@ -223,27 +222,16 @@ const pagination = ref({
 
 // 表单数据
 const formState = ref({
-  ruleCode: "",
-  ruleName: "",
-  ruleType: null,
-  actionType: "",
-  status: null,
-  startTime: "",
-  endTime: "",
-  effectiveDay: null,
-  rewardPoints: null,
-  isCumulative: false,
-  description: "",
-  dayMaxNumber: null,
+  taskName: "",
+  taskValue: null,
+  dailyMaximumValue: null,
 });
 
 // 表单验证规则
 const rules = {
-  ruleCode: [{ required: true, message: "请输入规则编码", trigger: "blur" }],
-  ruleName: [{ required: true, message: "请输入规则名称", trigger: "blur" }],
-  ruleType: [{ required: true, message: "请选择规则类型", trigger: "change" }],
-  status: [{ required: true, message: "请选择状态", trigger: "change" }],
-  effectiveDay: [{ required: true, message: "请输入有效期", trigger: "blur" }],
+  taskName: [{ required: true, message: "请输入规则名称", trigger: "blur" }],
+  taskValue: [{ required: true, message: "请输入奖励积分", trigger: "blur" }],
+  dailyMaximumValue: [{ required: true, message: "请输入每日最大次数", trigger: "blur" }],
 };
 
 // 获取状态颜色
@@ -401,16 +389,9 @@ const handleModalOk = async () => {
 const resetForm = () => {
   formRef.value?.resetFields();
   formState.value = {
-    ruleCode: "",
-    ruleName: "",
-    ruleType: null,
-    actionType: "",
-    status: null,
-    startTime: "",
-    endTime: "",
-    effectiveDay: null,
-    isCumulative: false,
-    description: "",
+    taskName: "",
+    taskValue: null,
+    dailyMaximumValue: null,
   };
   dateRange.value = [];
   currentId.value = "";
