@@ -13,7 +13,7 @@ export const deletePointsProduct = params => {
 export const getPointsProducts = params => {
   return request.get("/points/product/list", { params });
 };
-export const addPointsProduct = (params) => {
+export const addPointsProduct = params => {
   return request.post("/points/product/save", params);
 };
 
@@ -28,4 +28,12 @@ export const getPointsConsumptionLogs = params => {
 // 积分学习报表
 export const getPointsLearningReport = params => {
   return request.get("/points/pointsStream/learningReport", { params });
+};
+// 上下架
+export const updatePointsProductStatus = params => {
+  return request({
+    url: "/points/product/update",
+    method: "put",
+    data: params,
+  });
 };

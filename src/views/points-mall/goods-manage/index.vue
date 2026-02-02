@@ -40,11 +40,11 @@
             <a-popconfirm title="确定要删除吗?" @confirm="handleDelete(record.id)">
               <a style="color: red">删除</a>
             </a-popconfirm>
-            <a-popconfirm title="确定要下架该商品吗?" @confirm="handleUp(record)">
-              <a-button>下架</a-button>
+            <a-popconfirm title="确定要下架该商品吗?" @confirm="handleDown(record)">
+              <a>下架</a>
             </a-popconfirm>
-            <a-popconfirm title="确定要上架该商品吗?" @confirm="handleDown(record)">
-              <a-button>上架</a-button>
+            <a-popconfirm title="确定要上架该商品吗?" @confirm="handleUp(record)">
+              <a>上架</a>
             </a-popconfirm>
           </div>
         </template>
@@ -171,7 +171,13 @@
 </template>
 
 <script setup>
-import { addPointsProduct, deletePointsProduct, getPointsProducts, updatePointsProduct } from "@/api/goods/index";
+import {
+  addPointsProduct,
+  deletePointsProduct,
+  getPointsProducts,
+  updatePointsProduct,
+  updatePointsProductStatus,
+} from "@/api/goods/index";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { debounce } from "lodash-es";
@@ -181,6 +187,7 @@ import { nextTick, onMounted, ref } from "vue";
 const columns = [
   {
     title: "商品编码",
+    width: "15%",
     dataIndex: "productCode",
     key: "productCode",
   },
@@ -188,20 +195,19 @@ const columns = [
     title: "商品名称",
     dataIndex: "productName",
     key: "productName",
-    width: 300,
+    width: "15%",
+    ellipsis: true,
   },
 
   {
     title: "商品类型",
     dataIndex: "productType",
     key: "productType",
-    width: 100,
   },
   {
     title: "商品图片",
     dataIndex: "imageUrl",
     key: "imageUrl",
-    width: 100,
   },
   {
     title: "所需积分",
@@ -325,7 +331,7 @@ const getStatusText = status => {
     1: "上架",
     2: "售罄",
   };
-  return texts[status] || "未知";
+  return texts[status] || "";
 };
 
 // 获取积分商品列表
@@ -416,9 +422,19 @@ const handleDelete = async id => {
   }
 };
 // 上架
-const handleUp = async record => {};
+const handleUp = async record => {
+  updatePointsProductStatus({ ...record, id: record.id, status: 1 }).then(() => {
+    message.success("操作成功");
+    fetchData();
+  });
+};
 // 下架
-const handleDown = async record => {};
+const handleDown = async record => {
+  updatePointsProductStatus({...record, id: record.id, status: 0 }).then(() => {
+    message.success("操作成功");
+    fetchData();
+  });
+};
 
 // 批量删除
 const handleBatchDelete = async () => {

@@ -99,8 +99,8 @@ const columns = [
   },
   {
     title: "可用积分",
-    dataIndex: "totalPoints",
-    key: "totalPoints",
+    dataIndex: "avaPoints",
+    key: "avaPoints",
   },
   {
     title: "群组成员数量",
@@ -239,6 +239,8 @@ const fetchData = async () => {
       pageNo: pagination.value.current,
       pageSize: pagination.value.pageSize,
       groupName: searchValue.value,
+      orderType:2
+
     };
 
     const response = await getGroupPointsRanking(params);
